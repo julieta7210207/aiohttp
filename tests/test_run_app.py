@@ -40,6 +40,7 @@ except AttributeError:
     import asyncio.base_events
 
     Server = asyncio.base_events.Server
+Server: type[asyncio.Server]
 
 
 _has_unix_domain_socks = hasattr(socket, "AF_UNIX")
