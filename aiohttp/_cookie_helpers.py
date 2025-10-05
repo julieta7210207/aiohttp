@@ -293,8 +293,13 @@ def parse_set_cookie_headers(headers: Sequence[str]) -> List[Tuple[str, Morsel[s
                     # bypass validation and set already validated state. This is more stable than
                     # setting protected attributes directly and unlikely to change since it would
                     # break pickling.
+                    # In Python 3.14+, Morsel.__setstate__ validates coded_value for control characters.
+                    # Raw octal escape sequences like '\012' are interpreted as control characters.
+                    # We unquote the value to ensure it doesn't contain raw escape sequences that
+                    # would be misinterpreted as control characters.
+                    unquoted_value = _unquote(value)
                     current_morsel.__setstate__(  # type: ignore[attr-defined]
-                        {"key": key, "value": _unquote(value), "coded_value": value}
+                        {"key": key, "value": unquoted_value, "coded_value": unquoted_value}
                     )
                     parsed_cookies.append((key, current_morsel))
                     morsel_seen = True

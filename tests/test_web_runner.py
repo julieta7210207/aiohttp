@@ -17,6 +17,7 @@ except AttributeError:
     import asyncio.base_events
 
     Server = asyncio.base_events.Server
+Server: type[asyncio.Server]
 
 
 class _RunnerMaker(Protocol):
