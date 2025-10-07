@@ -56,7 +56,9 @@ def test_all_http_exceptions_exported() -> None:
         if name.startswith("_"):
             continue
         obj = getattr(web, name)
-        if isinstance(obj, type) and issubclass(obj, web.HTTPException):
+        if not isinstance(obj, type):
+            continue
+        if issubclass(obj, web.HTTPException):
             assert name in web.__all__
 
 
@@ -82,7 +84,9 @@ def test_terminal_classes_has_status_code() -> None:
     terminals = set()
     for name in dir(web):
         obj = getattr(web, name)
-        if isinstance(obj, type) and issubclass(obj, web.HTTPException):
+        if not isinstance(obj, type):
+            continue
+        if issubclass(obj, web.HTTPException):
             terminals.add(obj)
 
     dup = frozenset(terminals)
