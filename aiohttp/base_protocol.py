@@ -12,7 +12,6 @@ class BaseProtocol(asyncio.Protocol):
         "_paused",
         "_drain_waiter",
         "_connection_lost",
-        "_reading_paused",
         "transport",
     )
 
@@ -20,7 +19,6 @@ class BaseProtocol(asyncio.Protocol):
         self._loop: asyncio.AbstractEventLoop = loop
         self._paused = False
         self._drain_waiter: asyncio.Future[None] | None = None
-        self._reading_paused = False
 
         self.transport: asyncio.Transport | None = None
 
