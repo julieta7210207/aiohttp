@@ -35,6 +35,7 @@ __all__ = (
 )
 
 
+@attr.s(slots=True)
 class AbstractRouteDef(abc.ABC):
     @abc.abstractmethod
     def register(self, router: UrlDispatcher) -> list[AbstractRoute]:
@@ -45,11 +46,12 @@ _HandlerType = Union[type[AbstractView], Handler]
 
 
 @attr.s(auto_attribs=True, frozen=True, repr=False, slots=True)
+@attr.s(slots=True)
 class RouteDef(AbstractRouteDef):
-    method: str
-    path: str
-    handler: _HandlerType
-    kwargs: dict[str, Any]
+    method: str = attr.ib()
+    path: str = attr.ib()
+    handler: _HandlerType = attr.ib()
+    kwargs: dict[str, Any] = attr.ib(factory=dict)
 
     def __repr__(self) -> str:
         info = []
@@ -70,10 +72,11 @@ class RouteDef(AbstractRouteDef):
 
 
 @attr.s(auto_attribs=True, frozen=True, repr=False, slots=True)
+@attr.s(slots=True)
 class StaticDef(AbstractRouteDef):
-    prefix: str
-    path: PathLike
-    kwargs: dict[str, Any]
+    prefix: str = attr.ib()
+    path: PathLike = attr.ib()
+    kwargs: dict[str, Any] = attr.ib(factory=dict)
 
     def __repr__(self) -> str:
         info = []
