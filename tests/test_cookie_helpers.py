@@ -1073,6 +1073,10 @@ def test_parse_set_cookie_headers_date_formats_with_attributes() -> None:
     assert result[1][1]["samesite"] == "Strict"
 
 
+@pytest.mark.skipif(
+    sys.version_info >= (3, 14),
+    reason="Python 3.14+ raises CookieError for control characters in cookie values",
+)
 @pytest.mark.parametrize(
     ("header", "expected_name", "expected_value", "expected_coded"),
     [
