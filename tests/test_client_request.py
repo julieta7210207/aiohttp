@@ -768,12 +768,12 @@ async def test_urlencoded_formdata_charset(
     req = ClientRequest(
         "post",
         URL("http://python.org"),
-        data=aiohttp.FormData({"hey": "you"}, charset="koi8-r"),
+        data=aiohttp.FormData({"hey": "you"}, charset="utf-8"),
         loop=loop,
     )
     async with await req.send(conn):
         await asyncio.sleep(0)
-    assert "application/x-www-form-urlencoded; charset=koi8-r" == req.headers.get(
+    assert "application/x-www-form-urlencoded; charset=utf-8" == req.headers.get(
         "CONTENT-TYPE"
     )
 
