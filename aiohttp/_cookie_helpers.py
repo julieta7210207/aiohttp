@@ -124,7 +124,11 @@ def _unquote_replace(m: re.Match[str]) -> str:
     - Other escaped characters are unescaped by removing the backslash
     """
     if m[1]:
-        return chr(int(m[1], 8))
+        char_code = int(m[1], 8)
+        # Reject control characters (ASCII < 0x20) to prevent CookieError
+        if char_code < 0x20:
+            return m[0]
+        return chr(char_code)
     return m[2]
 
 
