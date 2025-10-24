@@ -1387,6 +1387,7 @@ async def test_netrc_auth_from_home_directory(auth_server: TestServer) -> None:
     ):
         text = await resp.text()
         assert text == "auth:Basic bmV0cmNfdXNlcjpuZXRyY19wYXNz"
+        assert resp.headers.get("Authorization") == "Basic bmV0cmNfdXNlcjpuZXRyY19wYXNz"
 
 
 @pytest.mark.usefixtures("netrc_default_contents")

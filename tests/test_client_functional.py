@@ -3800,7 +3800,7 @@ async def test_netrc_auth_from_home_directory(  # type: ignore[misc]
     async with client.get("/") as r:
         assert r.status == 200
         content = await r.json()
-    assert content["headers"]["Authorization"] == "Basic bmV0cmNfdXNlcjpuZXRyY19wYXNz"
+    assert content["headers"].get("Authorization") == "Basic bmV0cmNfdXNlcjpuZXRyY19wYXNz"
 
 
 @pytest.mark.usefixtures("netrc_default_contents")
