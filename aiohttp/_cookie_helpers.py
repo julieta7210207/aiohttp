@@ -305,7 +305,12 @@ def parse_set_cookie_headers(headers: Sequence[str]) -> List[Tuple[str, Morsel[s
                     break
                 elif current_morsel is not None:
                     # Regular attribute with value
-                    current_morsel[lower_key] = _unquote(value)
+                    unquoted_value = _unquote(value)
+                    # Validate that the unquoted value does not contain control characters
+                    # to comply with http.cookies validation rules
+                    if any(ord(c) < 32 or ord(c) == 127 for c in unquoted_value):
+                        continue
+                    current_morsel[lower_key] = unquoted_value
             elif value is not None:
                 # This is a cookie name=value pair
                 # Validate the name
@@ -322,8 +327,13 @@ def parse_set_cookie_headers(headers: Sequence[str]) -> List[Tuple[str, Morsel[s
                     # bypass validation and set already validated state. This is more stable than
                     # setting protected attributes directly and unlikely to change since it would
                     # break pickling.
+                    unquoted_value = _unquote(value)
+                    # Validate that the unquoted value does not contain control characters
+                    # to comply with http.cookies validation rules
+                    if any(ord(c) < 32 or ord(c) == 127 for c in unquoted_value):
+                        continue
                     current_morsel.__setstate__(  # type: ignore[attr-defined]
-                        {"key": key, "value": _unquote(value), "coded_value": value}
+                        {"key": key, "value": unquoted_value, "coded_value": value}
                     )
                     parsed_cookies.append((key, current_morsel))
                     morsel_seen = True
