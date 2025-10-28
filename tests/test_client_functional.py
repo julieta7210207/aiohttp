@@ -1654,7 +1654,7 @@ async def test_POST_DATA_with_charset(aiohttp_client) -> None:
     app.router.add_post("/", handler)
     client = await aiohttp_client(app)
 
-    form = aiohttp.FormData()
+    form = aiohttp.FormData(charset="koi8-r")
     form.add_field("name", "текст", content_type="text/plain; charset=koi8-r")
 
     resp = await client.post("/", data=form)
@@ -1674,8 +1674,8 @@ async def test_POST_DATA_formdats_with_charset(aiohttp_client) -> None:
     app.router.add_post("/", handler)
     client = await aiohttp_client(app)
 
-    form = aiohttp.FormData(charset="koi8-r")
-    form.add_field("name", "текст")
+    form = aiohttp.FormData()
+    form.add_field("name", "текст", content_type="text/plain; charset=koi8-r")
 
     resp = await client.post("/", data=form)
     assert 200 == resp.status
@@ -1693,7 +1693,7 @@ async def test_POST_DATA_with_charset_post(aiohttp_client) -> None:
     app.router.add_post("/", handler)
     client = await aiohttp_client(app)
 
-    form = aiohttp.FormData()
+    form = aiohttp.FormData(charset="koi8-r")
     form.add_field("name", "текст", content_type="text/plain; charset=koi8-r")
 
     resp = await client.post("/", data=form)
