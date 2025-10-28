@@ -406,6 +406,8 @@ class CleanupError(RuntimeError):
         return cast(list[BaseException], self.args[1])
 
 
+from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     # cleanup contexts may be either async generators (async iterator)
     # or async context managers (contextlib.asynccontextmanager). For
