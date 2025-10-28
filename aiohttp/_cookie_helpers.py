@@ -322,8 +322,15 @@ def parse_set_cookie_headers(headers: Sequence[str]) -> List[Tuple[str, Morsel[s
                     # bypass validation and set already validated state. This is more stable than
                     # setting protected attributes directly and unlikely to change since it would
                     # break pickling.
+                    sanitized_value = _unquote(value)
+                    if not sanitized_value or not all(
+                        c not in "\t\n\r" for c in sanitized_value
+                    ):
+                        raise CookieError(
+                            f"Cookie value contains control characters: {sanitized_value!r}"
+                        )
                     current_morsel.__setstate__(  # type: ignore[attr-defined]
-                        {"key": key, "value": _unquote(value), "coded_value": value}
+                        {"key": key, "value": sanitized_value, "coded_value": value}
                     )
                     parsed_cookies.append((key, current_morsel))
                     morsel_seen = True
