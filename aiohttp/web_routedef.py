@@ -57,10 +57,10 @@ _HandlerType = Union[Type[AbstractView], Handler]
 
 @attr.s(auto_attribs=True, frozen=True, repr=False, slots=True)
 class RouteDef(AbstractRouteDef):
-    method: str
-    path: str
-    handler: _HandlerType
-    kwargs: Dict[str, Any]
+    method: str = attr.ib()
+    path: str = attr.ib()
+    handler: _HandlerType = attr.ib()
+    kwargs: Dict[str, Any] = attr.ib(factory=dict)
 
     def __repr__(self) -> str:
         info = []
@@ -82,9 +82,9 @@ class RouteDef(AbstractRouteDef):
 
 @attr.s(auto_attribs=True, frozen=True, repr=False, slots=True)
 class StaticDef(AbstractRouteDef):
-    prefix: str
-    path: PathLike
-    kwargs: Dict[str, Any]
+    prefix: str = attr.ib()
+    path: PathLike = attr.ib()
+    kwargs: Dict[str, Any] = attr.ib(factory=dict)
 
     def __repr__(self) -> str:
         info = []
